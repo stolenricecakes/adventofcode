@@ -3,7 +3,7 @@ from functools import cmp_to_key
 forward_rules = []
 backward_rules = []
 desired_prints = []
-sortos = []
+fixed = []
 legit = []
 
 
@@ -60,37 +60,15 @@ def find_legit():
         if printy == sorty:
             legit.append(printy)
         else:
-            print(f"{printy} is total trash")
+            fixed.append(sorty)
+            print(f"{printy} is total trash, but fixed it to {sorty}")
 
-def add_legit():
+
+def sum_the_middles(printos):
     total = 0
-    for l in legit:
-        middle = int(len(l) / 2)
-        print(f"middle is: {middle}")
-        total += l[middle]
-        print(f"total is now: {total}")
-    return total
-
-
-def wowzo():
-    global sortos
-    for printy in desired_prints:
-        #print(f"\n\n\tprinty: {printy}")
-        sorty = printy.copy()
-        sortman(sorty)
-        sortos.append(sorty)
-        print(f"\tprintyagain: {sorty}")
-
-
-def middle_out():
-    global sortos
-    total = 0
-    for sorty in sortos:
-        middle = int(len(sorty) / 2)
-        print(f"middle is: {middle}")
-        total += sorty[middle]
-        print(f"total is now: {total}")
-
+    for printy in printos:
+        middle = int(len(printy) / 2)
+        total += printy[middle]
     return total
 
 
@@ -98,12 +76,12 @@ if __name__ == '__main__':
     read_stuff()
     woo()
     find_legit()
-    total = add_legit()
-    print(f" yo bro, sportin this total: \t{total}")
-#    wowzo()
-#    total = middle_out()
-#    print(f"hey there total is: {total}")
+    legitTotal = sum_the_middles(legit)
+    print(f" yo bro, sportin this part 1 total: \t{legitTotal}")
+    fixedTotal = sum_the_middles(fixed)
+    print(f" 💩 sportin this part 2 total: \t{fixedTotal}")
 
 
 ### fartles, 12020 is too high
 ### 7307 for part1.
+## 4713 part 2?
