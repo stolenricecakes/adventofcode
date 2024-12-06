@@ -30,35 +30,17 @@ def is_enabled(enabled_ranges, value):
 
 def part2(lines):
     total = 0
-    multRE = re.compile("mul\\((\\d{1,3}),(\\d{1,3})\\)")
-    dodontRE = re.compile("(do\\(\\)|don't\\(\\))")
+    multRE = re.compile("(do\\(\\)|don't\\(\\))|mul\\((\\d{1,3}),(\\d{1,3})\\)")
     enabled = True
     for line in lines:
-        enabledRanges = []
-        lastEnable = 0
-        onoffs = dodontRE.finditer(line)
-        for onoff in onoffs:
-            print(f"onoffy: {onoff}")
-            if onoff.group(1).find("don") == 0:
-               if enabled:
-                   enabledRanges.append((lastEnable, onoff.span()[0]))
-                   enabled = False
-            else:
-               if not enabled:
-                   enabled = True
-                   lastEnable = onoff.span()[1]
-        if enabled:
-           enabledRanges.append((lastEnable, len(line)))
-
-        print(f"ranges: {enabledRanges}")
-
         for result in multRE.finditer(line):
-            # print(f"resulty: {result}")
-            if is_enabled(enabledRanges, result.span()[0]):
-                total += int(result.group(1)) * int(result.group(2))
-                print(f" total is now: {total}\n")
-            else:
-                print(f" result ({result.group(1)},{result.group(2)}) at {result.span()[0]} aint even enabled.")
+            matchy = result.group()
+            if matchy == "do()":
+                enabled = True
+            elif matchy == "don't()":
+                enabled = False
+            elif enabled:
+                total += int(result.group(2)) * int(result.group(3))
 
     return total
 
@@ -70,3 +52,5 @@ if __name__ == '__main__':
     part2_total = part2(lines)
     print(f"holy macorole! part2 total is: {part2_total}")
 
+
+### part2:  82733683
