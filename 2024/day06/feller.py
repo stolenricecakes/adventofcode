@@ -11,11 +11,14 @@ class Feller:
         self.direction = "up"
 
     def next_spot(self):
-        if self.direction == "up":
+        return self.next_spot_with_direction(self.direction)
+
+    def next_spot_with_direction(self, dir):
+        if dir == "up":
             return (self.x, self.y-1)
-        elif self.direction == "right":
+        elif dir == "right":
             return (self.x + 1, self.y)
-        elif self.direction == "down":
+        elif dir == "down":
             return (self.x, self.y+1)
         else:
             return (self.x - 1, self.y)
@@ -33,5 +36,15 @@ class Feller:
     def get_direction_val(self):
         return self.direction_dict[self.direction]
 
+    def get_right_val(self):
+        return self.direction_dict[self.next_direction[self.direction]]
+
     def turn(self):
         self.direction = self.next_direction[self.direction]
+
+    def get_right_direction(self):
+        return self.next_direction[self.direction]
+
+    def get_spot_on_right(self):
+        next_dir = self.next_direction[self.direction]
+        return self.next_spot_with_direction(next_dir)
