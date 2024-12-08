@@ -35,9 +35,6 @@ def initalize_visited_ary():
             visited_ary[y].append(0)
 
 
-## so, alternatively, you can keep going in the same right direction and see if anywhere you run into a visited square in the same direction
-## and now I really actually want a 2D array instead of a dict. yikes.
-
 
 def walk_the_grid(fella):
     global grid, visited, barracades
@@ -57,6 +54,7 @@ def walk_the_grid(fella):
             if right_slice[i] & rightval == rightval:
                 print(f"HOLY MOLE GUACAMOLE!  I found me a loop at rightslice # {i}")
                 loop_here = True
+                add_to_right_slice(fella, rightval)
 
 #        rightval = fella.get_right_val()
 #        right_key = str(on_right[0]) + "," + str(on_right[1])
@@ -103,24 +101,64 @@ def print_summary(fella):
 
 
 def get_right_slice(fella):
+    global grid
     global visited_ary
     right_slice = []
     rdir = fella.get_right_direction()
     pos = fella.current_position()
     if rdir == "up":
-        for i in range(pos[1], -1, -1):
+        for i in range(pos[1]+1, -1, -1):
             right_slice.append(visited_ary[i][pos[0]])
+        for i in range(pos[1]-1, rows):
+            if grid[i][pos[0]] != "#":
+                right_slice.append(visited_ary[i][pos[0]])
+            else:
+                break
     elif rdir == "right":
-        for i in range(pos[0], cols):
+        for i in range(pos[0]+1, cols):
             right_slice.append(visited_ary[pos[1]][i])
+        for i in range(pos[0]-1, -1, -1):
+            if grid[pos[1]][i] != "#":
+                right_slice.append(visited_ary[pos[1]][i])
+            else:
+                break
     elif rdir == "down":
-        for i in range(pos[1], rows):
+        for i in range(pos[1]+1, rows):
             right_slice.append(visited_ary[i][pos[0]])
+        for i in range(pos[1] - 1, -1, -1):
+            if grid[i][pos[0]] != "#":
+                right_slice.append(visited_ary[i][pos[0]])
+            else:
+                break
     else:
-        for i in range(pos[0], -1, -1):
+        for i in range(pos[0]-1, -1, -1):
             right_slice.append(visited_ary[pos[1]][i])
+        for i in range(pos[0]+1, cols):
+            if grid[pos[1]][i] != "#":
+                right_slice.append(visited_ary[pos[1]][i])
+            else:
+                break
 
     return right_slice
+
+
+def add_to_right_slice(fella, rightval):
+    global visited_ary
+    rdir = fella.get_right_direction()
+    pos = fella.current_position()
+    if rdir == "up":
+        for i in range(pos[1], -1, -1):
+            visited_ary[i][pos[0]] |= rightval
+    elif rdir == "right":
+        for i in range(pos[0], cols):
+            visited_ary[pos[1]][i] |= rightval
+    elif rdir == "down":
+        for i in range(pos[1], rows):
+            visited_ary[i][pos[0]] |= rightval
+    else:
+        for i in range(pos[0], -1, -1):
+            visited_ary[pos[1]][i] |= rightval
+
 
 
 if __name__ == '__main__':
@@ -132,4 +170,6 @@ if __name__ == '__main__':
 
 
 ## part 1: 5564
-## part 2: 867 too low farties. 
+## part 2: 867 too low farties.
+## part 2: 992 too low (marking all the right slices as visited)
+## part 2: 992 - even going the opposite of the right direction looking for others with the same value.
